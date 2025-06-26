@@ -1,7 +1,6 @@
 package net.omc.managers;
 
 import net.omc.OMCPlugin;
-import net.omc.util.Cryptography;
 import net.omc.util.LicenseConfig;
 
 public class SecretsManager {
@@ -24,14 +23,12 @@ public class SecretsManager {
 
     private final OMCPlugin plugin;
     private final LicenseConfig config;
-    private final Cryptography cryptography;
     private String key; // TODO fetch from serverless api
 
 
     public SecretsManager(OMCPlugin plugin) {
         this.plugin = plugin;
-        this.cryptography = new Cryptography(plugin);
-        this.config = new LicenseConfig(plugin, "loader.dat", cryptography);
+        this.config = new LicenseConfig(plugin, "loader.dat");
     }
 
     public void loadTokens() {

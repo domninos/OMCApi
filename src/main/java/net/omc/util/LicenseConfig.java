@@ -7,28 +7,26 @@ import java.io.*;
 
 public class LicenseConfig {
     private final File file;
-    private final Cryptography cryptography;
     private JSONObject data;
 
-    public LicenseConfig(OMCPlugin plugin, String file_name, Cryptography cryptography) {
+    public LicenseConfig(OMCPlugin plugin, String file_name) {
         this.file = new File(plugin.getDataFolder(), "/lib/" + file_name);
-        this.cryptography = cryptography;
     }
 
     public void loadEncrypted(String cryptKey) throws Exception {
         generateFile();
 
         String encrypted = load(false);
-        String decrypted = cryptography.decrypt(encrypted, cryptKey);
+        String decrypted = Cryptography.decrypt(encrypted, cryptKey);
 
         this.data = new JSONObject(decrypted);
     }
 
-    public void saveEncrypted(String cryptKey) throws Exception {
+    public void saveEncrypted(String cryptKey) {
         generateFile();
 
         String plain = toJSONString();
-        String encrypted = cryptography.encrypt(plain, cryptKey);
+        String encrypted = Cryptography.encrypt(plain, cryptKey);
 
         save(encrypted);
     }

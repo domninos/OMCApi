@@ -1,7 +1,5 @@
 package net.omc.util;
 
-import net.omc.OMCPlugin;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -12,14 +10,8 @@ import java.util.Base64;
 public class Cryptography {
     private static final String ALGORITHM = "AES";
 
-    private final OMCPlugin plugin;
-
-    public Cryptography(OMCPlugin plugin) {
-        this.plugin = plugin;
-    }
-
     // AES with random IV (CBC)
-    public String decrypt(String encryptedText, String key) {
+    public static String decrypt(String encryptedText, String key) {
         try {
             byte[] combined = Base64.getDecoder().decode(encryptedText);
             byte[] iv = new byte[16];
@@ -38,13 +30,12 @@ public class Cryptography {
 
             return new String(original, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            plugin.error("Something went wrong encrypting the license.", e);
             return "NULL";
         }
     }
 
     // AES with random IV (CBC)
-    public String encrypt(String plainText, String key) {
+    public static String encrypt(String plainText, String key) {
         try {
             byte[] keyBytes = getKeyBytes(key);
             SecretKeySpec secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
@@ -64,12 +55,11 @@ public class Cryptography {
 
             return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
-            plugin.error("Something went wrong decrypting license.", e);
             return "NULL";
         }
     }
 
-    private byte[] getKeyBytes(String key) {
+    private static byte[] getKeyBytes(String key) {
         byte[] keyByte = new byte[16]; // AES-128 (16 bytes)
         byte[] input = key.getBytes(StandardCharsets.UTF_8);
         System.arraycopy(input, 0, keyByte, 0, Math.min(input.length, 16));
