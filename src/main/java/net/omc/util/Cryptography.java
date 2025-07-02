@@ -10,8 +10,11 @@ import java.util.Base64;
 public class Cryptography {
     private static final String ALGORITHM = "AES";
 
+    private static final String FINAL_KEY = "oMCPriv_KEy";
+
+
     // AES with random IV (CBC)
-    public static String decrypt(String encryptedText, String key) {
+    public static String decrypt(String encryptedText) {
         try {
             byte[] combined = Base64.getDecoder().decode(encryptedText);
             byte[] iv = new byte[16];
@@ -20,7 +23,7 @@ public class Cryptography {
             System.arraycopy(combined, 0, iv, 0, 16);
             System.arraycopy(combined, 16, encrypted, 0, encrypted.length);
 
-            SecretKeySpec secretKey = new SecretKeySpec(getKeyBytes(key), ALGORITHM);
+            SecretKeySpec secretKey = new SecretKeySpec(getKeyBytes(FINAL_KEY), ALGORITHM);
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -35,9 +38,9 @@ public class Cryptography {
     }
 
     // AES with random IV (CBC)
-    public static String encrypt(String plainText, String key) {
+    public static String encrypt(String plainText) {
         try {
-            byte[] keyBytes = getKeyBytes(key);
+            byte[] keyBytes = getKeyBytes(FINAL_KEY);
             SecretKeySpec secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");

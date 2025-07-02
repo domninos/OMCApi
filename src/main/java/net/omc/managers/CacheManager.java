@@ -1,26 +1,33 @@
 package net.omc.managers;
 
 import net.omc.OMCPlugin;
-import net.omc.util.Cryptography;
-import net.omc.util.LicenseConfig;
+import net.omc.config.LicenseConfig;
 
 import java.io.IOException;
 
 // store System.currentTimeInMillis() in ./plugins/<omc plugin>/lib/license-cache.dat
-// should only be checked every day to prevent rate limits
+// should only be checked once every day to prevent rate limits
 public class CacheManager {
 
-    private final long cacheValid = 24 * 60 * 60 * 1000; // 24h
+    private static final long VALID_CACHE = 24 * 60 * 60 * 1000; // 24h
 
     private final OMCPlugin plugin;
     private final LicenseConfig config;
+    private boolean valid = false;
 
     public CacheManager(OMCPlugin plugin) {
         this.plugin = plugin;
-        this.config = new LicenseConfig(plugin, "license-cache.dat", new Cryptography(plugin));
+        this.config = new LicenseConfig(plugin, "license-cache.dat");
+    }
+
+    public void invalidate() {
+        this.valid = false;
     }
 
     public void loadCache() {
+        if (isCacheValid())
+            return;
+
         try {
             config.load(true);
         } catch (IOException e) {
@@ -29,14 +36,19 @@ public class CacheManager {
     }
 
     public boolean isCacheValid() {
-        return (System.currentTimeMillis() - getCurrentCache()) < cacheValid;
+        return this.valid && getCurrentCache() != -1 && (System.currentTimeMillis() - getCurrentCache()) < VALID_CACHE;
     }
 
-    public void updateCache() {
+    public void revalidateCache() {
         config.set("cache", System.currentTimeMillis());
+        config.save();
     }
 
     public long getCurrentCache() {
         return config.contains("cache") ? config.getLong("cache") : -1;
+    }
+
+    public LicenseConfig getConfig() {
+        return config;
     }
 }

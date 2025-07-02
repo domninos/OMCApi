@@ -1,5 +1,5 @@
 package net.omc.util;
 
-public interface NCFunctionExec {
+public interface OMCExec {
     boolean exec();
 }

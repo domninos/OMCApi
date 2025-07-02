@@ -1,4 +1,4 @@
-package net.omc.util;
+package net.omc.config;
 
 import net.omc.OMCPlugin;
 import org.json.JSONObject;
@@ -13,22 +13,8 @@ public class LicenseConfig {
         this.file = new File(plugin.getDataFolder(), "/lib/" + file_name);
     }
 
-    public void loadEncrypted(String cryptKey) throws Exception {
-        generateFile();
-
-        String encrypted = load(false);
-        String decrypted = Cryptography.decrypt(encrypted, cryptKey);
-
-        this.data = new JSONObject(decrypted);
-    }
-
-    public void saveEncrypted(String cryptKey) {
-        generateFile();
-
-        String plain = toJSONString();
-        String encrypted = Cryptography.encrypt(plain, cryptKey);
-
-        save(encrypted);
+    public void save() {
+        save(data.toString());
     }
 
     public void save(String toSave) {
