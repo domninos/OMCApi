@@ -176,7 +176,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
         }
 
         if (async)
-            Bukkit.getScheduler().runTaskAsynchronously(plugin.getJavaPlugin(), () -> saveCallbackMap(enabledPlayers));
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> saveCallbackMap(enabledPlayers));
         else
             saveCallbackMap(enabledPlayers);
     }
@@ -220,7 +220,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
         }
 
         if (async)
-            Bukkit.getScheduler().runTaskAsynchronously(plugin.getJavaPlugin(), () -> saveCallback(playerName, value));
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> saveCallback(playerName, value));
         else
             saveCallback(playerName, value);
     }

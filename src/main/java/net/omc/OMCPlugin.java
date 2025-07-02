@@ -1,25 +1,22 @@
 package net.omc;
 
 import net.omc.config.OMCConfig;
-import net.omc.handlers.OMCDatabaseHandler;
 import net.omc.handlers.LibraryHandler;
 import net.omc.handlers.OMCConfigHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 import net.omc.handlers.OMCMessageHandler;
 import net.omc.managers.HikariManager;
 import net.omc.util.Flushable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.logging.Level;
 
-public abstract class OMCPlugin implements Flushable {
+public abstract class OMCPlugin extends JavaPlugin implements Flushable {
     /*
     TODO:
-     - LibraryHandler
      - VersionHandler
      */
 
@@ -27,13 +24,7 @@ public abstract class OMCPlugin implements Flushable {
 
     public abstract void registerCommands();
 
-    public abstract JavaPlugin getJavaPlugin();
-
-    public abstract String getPluginName();
-
-    public abstract String getPluginPrefix();
-
-    public abstract File getDataFolder();
+    public abstract String getNetworkPrefix();
 
     public abstract void saveResource(String fileName, boolean b);
 
@@ -82,7 +73,4 @@ public abstract class OMCPlugin implements Flushable {
     public String translate(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
-
-
-    public abstract PluginDescriptionFile getDescription();
 }

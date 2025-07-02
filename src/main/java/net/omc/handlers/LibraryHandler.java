@@ -22,7 +22,7 @@ public class LibraryHandler {
 
     public LibraryHandler(OMCPlugin plugin) {
         this.plugin = plugin;
-        this.libraryManager = new BukkitLibraryManager(plugin.getJavaPlugin());
+        this.libraryManager = new BukkitLibraryManager(plugin);
     }
 
     public void loadLibraries(OMCDatabase.Type type) throws ExecutionException, InterruptedException {
@@ -126,9 +126,9 @@ public class LibraryHandler {
         libraryManager.addMavenCentral();
         libraryManager.addSonatype();
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin.getJavaPlugin(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                loadPostgresLib(false).get(); // TODO for supabase
+                loadPostgresLib(false).get();
             } catch (InterruptedException | ExecutionException e) {
                 plugin.error("Something went wrong loading postgresql.", e);
             }

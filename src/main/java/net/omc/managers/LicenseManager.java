@@ -34,7 +34,7 @@ public class LicenseManager {
         this.plugin = plugin;
         this.cacheManager = new CacheManager(plugin);
 
-        this.networkIdGenerator = new NetworkIdGenerator(plugin.getPluginPrefix());
+        this.networkIdGenerator = new NetworkIdGenerator(plugin.getNetworkPrefix());
     }
 
     public void loadLicenseFromConfig(OMCConfig config) {
@@ -80,11 +80,11 @@ public class LicenseManager {
         }
     }
 
-    public void loadLicense(OMCPlugin plugin, String network_id, String ip) {
+    public void loadLicense(String network_id, String ip) {
         cacheManager.loadCache();
 
         if (!cacheManager.isCacheValid()) {
-            Status status = LicenseValidator.checkLicense(plugin.getPluginName(), network_id, ip);
+            Status status = LicenseValidator.checkLicense(plugin.getDescription().getName(), network_id, ip);
 
             if (status != Status.NULL) {
                 this.license = new License(status);
