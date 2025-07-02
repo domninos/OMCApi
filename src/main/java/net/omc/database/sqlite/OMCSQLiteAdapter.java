@@ -3,27 +3,27 @@ package net.omc.database.sqlite;
 import net.omc.OMCPlugin;
 import net.omc.database.DatabaseAdapter;
 import net.omc.database.OMCDatabase;
-import net.omc.handlers.DatabaseHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 
 import java.util.Map;
 
-public abstract class SQLiteAdapter implements DatabaseAdapter {
+public abstract class OMCSQLiteAdapter implements DatabaseAdapter {
 
     private final OMCPlugin plugin;
 
-    private final SQLiteDatabase database;
+    private final OMCSQLiteDatabase database;
 
-    public SQLiteAdapter(OMCPlugin plugin, SQLiteDatabase database) {
+    public OMCSQLiteAdapter(OMCPlugin plugin, OMCSQLiteDatabase database) {
         this.plugin = plugin;
         this.database = database;
     }
 
-    public static SQLiteAdapter from(DatabaseAdapter adapter) {
-        return adapter instanceof SQLiteAdapter ? ((SQLiteAdapter) adapter) : null;
+    public static OMCSQLiteAdapter from(DatabaseAdapter adapter) {
+        return adapter instanceof OMCSQLiteAdapter ? ((OMCSQLiteAdapter) adapter) : null;
     }
 
-    public static SQLiteAdapter adapt() {
-        return from(DatabaseHandler.ADAPTER);
+    public static OMCSQLiteAdapter adapt() {
+        return from(OMCDatabaseHandler.ADAPTER);
     }
 
     public abstract void lastSaveMap(); // boilerplate

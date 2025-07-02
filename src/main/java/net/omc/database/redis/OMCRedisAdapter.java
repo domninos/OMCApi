@@ -3,27 +3,27 @@ package net.omc.database.redis;
 import net.omc.OMCPlugin;
 import net.omc.database.DatabaseAdapter;
 import net.omc.database.OMCDatabase;
-import net.omc.handlers.DatabaseHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 
 import java.util.Map;
 
-public abstract class RedisAdapter implements DatabaseAdapter {
+public abstract class OMCRedisAdapter implements DatabaseAdapter {
 
     private final OMCPlugin plugin;
 
-    private final RedisDatabase redis;
+    private final OMCRedisDatabase redis;
 
-    public RedisAdapter(OMCPlugin plugin, RedisDatabase redis) {
+    public OMCRedisAdapter(OMCPlugin plugin, OMCRedisDatabase redis) {
         this.plugin = plugin;
         this.redis = redis;
     }
 
-    public static RedisAdapter from(DatabaseAdapter adapter) {
-        return adapter instanceof RedisAdapter ? ((RedisAdapter) adapter) : null;
+    public static OMCRedisAdapter from(DatabaseAdapter adapter) {
+        return adapter instanceof OMCRedisAdapter ? ((OMCRedisAdapter) adapter) : null;
     }
 
-    public static RedisAdapter adapt() {
-        return from(DatabaseHandler.ADAPTER);
+    public static OMCRedisAdapter adapt() {
+        return from(OMCDatabaseHandler.ADAPTER);
     }
 
     @Override

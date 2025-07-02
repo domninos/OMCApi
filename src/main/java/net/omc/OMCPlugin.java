@@ -1,7 +1,7 @@
 package net.omc;
 
 import net.omc.config.OMCConfig;
-import net.omc.handlers.DatabaseHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 import net.omc.handlers.LibraryHandler;
 import net.omc.handlers.OMCConfigHandler;
 import net.omc.handlers.OMCMessageHandler;
@@ -39,7 +39,7 @@ public abstract class OMCPlugin implements Flushable {
 
     public abstract OMCConfig getOMCConfig();
 
-    public abstract DatabaseHandler getDatabaseHandler();
+    public abstract OMCDatabaseHandler getDatabaseHandler();
 
     public HikariManager getHikariManager() {
         return getAPI().getHikariManager(this);

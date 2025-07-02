@@ -1,29 +1,28 @@
-package net.omc.database.flatfile;
+package net.omc.database.postgres;
 
 import net.omc.OMCPlugin;
 import net.omc.database.DatabaseAdapter;
 import net.omc.database.OMCDatabase;
-import net.omc.handlers.DatabaseHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 
 import java.util.Map;
 
-public abstract class FlatFileAdapter implements DatabaseAdapter {
-    // extend this to implement
+public abstract class OMCPostgresAdapter implements DatabaseAdapter {
 
     private final OMCPlugin plugin;
-    private final FlatFileDatabase database;
+    private final OMCPostgresDatabase database;
 
-    public FlatFileAdapter(OMCPlugin plugin, FlatFileDatabase database) {
+    public OMCPostgresAdapter(OMCPlugin plugin, OMCPostgresDatabase database) {
         this.plugin = plugin;
         this.database = database;
     }
 
-    public static FlatFileAdapter from(DatabaseAdapter adapter) {
-        return adapter instanceof FlatFileAdapter ? ((FlatFileAdapter) adapter) : null;
+    public static OMCPostgresAdapter from(DatabaseAdapter adapter) {
+        return adapter instanceof OMCPostgresAdapter ? ((OMCPostgresAdapter) adapter) : null;
     }
 
-    public static FlatFileAdapter adapt() {
-        return from(DatabaseHandler.ADAPTER);
+    public static OMCPostgresAdapter adapt() {
+        return from(OMCDatabaseHandler.ADAPTER);
     }
 
     public abstract void initDatabase(); // boilerplate
@@ -34,10 +33,9 @@ public abstract class FlatFileAdapter implements DatabaseAdapter {
 
     public abstract void setToCache(String playerName); // boilerplate
 
-
     @Override
     public boolean connect() {
-        return database.connect();
+        return this.database.connectConfig();
     }
 
     @Override
@@ -46,13 +44,17 @@ public abstract class FlatFileAdapter implements DatabaseAdapter {
     }
 
     @Override
-    public boolean existsInDatabase(String playerName) {
-        return database.has(playerName);
+    public boolean existsInDatabase(String playerName) { // inconsistent, use ISQLDatabase#handleExists(String)
+        return this.database.fetchExists(playerName);
     }
 
     @Override
     public void savePlayer(String playerName, Boolean value) {
-        database.savePlayer(playerName, value); // SAVE TO FILE
+        try {
+            this.database.savePlayer(playerName, value, true);
+        } catch (Exception e) {
+            plugin.error("Could not save database properly", e);
+        }
     }
 
     @Override
@@ -63,13 +65,13 @@ public abstract class FlatFileAdapter implements DatabaseAdapter {
                 plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
             }
         } catch (Exception e) {
-            plugin.error("Something went wrong closing database: ", e);
+            plugin.error("Something went wrong closing database connection: ", e);
         }
     }
 
     @Override
     public boolean getValue(String playerName) {
-        return this.database.getValue(playerName);
+        return this.database.fetchEnabled(playerName);
     }
 
     @Override
@@ -79,11 +81,11 @@ public abstract class FlatFileAdapter implements DatabaseAdapter {
 
     @Override
     public OMCDatabase.Type getType() {
-        return OMCDatabase.Type.FLAT_FILE;
+        return OMCDatabase.Type.POSTGRESQL;
     }
 
     @Override
     public String toString() {
-        return "FLAT-FILE";
+        return "PostgreSQL";
     }
 }

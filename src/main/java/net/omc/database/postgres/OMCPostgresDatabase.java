@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
-public abstract class PostgresDatabase implements OMCDatabase, ISQLDatabase, SQLCredentials {
+public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, SQLCredentials {
 
     private boolean enabled = false;
     private String host = "N/A";
@@ -26,7 +26,7 @@ public abstract class PostgresDatabase implements OMCDatabase, ISQLDatabase, SQL
 
     private final OMCPlugin plugin;
 
-    public PostgresDatabase(OMCPlugin plugin, String tableName) {
+    public OMCPostgresDatabase(OMCPlugin plugin, String tableName) {
         this.plugin = plugin;
         this.tableName = tableName;
     }

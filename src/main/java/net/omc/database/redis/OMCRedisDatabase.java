@@ -10,7 +10,7 @@ import net.omc.util.MainUtil;
 
 import java.util.Map;
 
-public class RedisDatabase implements OMCDatabase {
+public class OMCRedisDatabase implements OMCDatabase {
 
     private final OMCPlugin plugin;
 
@@ -21,7 +21,7 @@ public class RedisDatabase implements OMCDatabase {
 
     private boolean enabled = false;
 
-    public RedisDatabase(OMCPlugin plugin, String key) {
+    public OMCRedisDatabase(OMCPlugin plugin, String key) {
         this.plugin = plugin;
         this.KEY = key;
     }

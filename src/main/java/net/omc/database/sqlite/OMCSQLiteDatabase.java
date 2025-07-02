@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public abstract class SQLiteDatabase implements OMCDatabase, ISQLDatabase, SQLCredentialLess {
+public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQLCredentialLess {
     private final OMCPlugin plugin;
     private final File db_file;
     private final String urlString;
@@ -23,7 +23,7 @@ public abstract class SQLiteDatabase implements OMCDatabase, ISQLDatabase, SQLCr
 
     private final String host, tableName;
 
-    public SQLiteDatabase(OMCPlugin plugin, String host, String tableName) {
+    public OMCSQLiteDatabase(OMCPlugin plugin, String host, String tableName) {
         this.plugin = plugin;
         this.tableName = tableName;
         this.host = host;

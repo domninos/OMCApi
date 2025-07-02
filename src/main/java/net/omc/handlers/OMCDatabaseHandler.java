@@ -4,47 +4,47 @@ import net.omc.OMCPlugin;
 import net.omc.database.DatabaseAdapter;
 import net.omc.database.ISQLDatabase;
 import net.omc.database.OMCDatabase;
-import net.omc.database.flatfile.FlatFileAdapter;
-import net.omc.database.postgres.PostgresAdapter;
-import net.omc.database.redis.RedisAdapter;
-import net.omc.database.sqlite.SQLiteAdapter;
+import net.omc.database.flatfile.OMCFlatFileAdapter;
+import net.omc.database.postgres.OMCPostgresAdapter;
+import net.omc.database.redis.OMCRedisAdapter;
+import net.omc.database.sqlite.OMCSQLiteAdapter;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public abstract class DatabaseHandler {
+public abstract class OMCDatabaseHandler {
     private final OMCPlugin plugin;
 
     private int updates = 0;
 
     public static DatabaseAdapter ADAPTER;
 
-    public DatabaseHandler(OMCPlugin plugin) {
+    public OMCDatabaseHandler(OMCPlugin plugin) {
         this.plugin = plugin;
     }
 
     public boolean isFlatFile() {
         return ADAPTER != null
                 && plugin.getDBConfigHandler().getDatabaseType() == OMCDatabase.Type.FLAT_FILE
-                && ADAPTER instanceof FlatFileAdapter;
+                && ADAPTER instanceof OMCFlatFileAdapter;
     }
 
     public boolean isRedis() {
         return ADAPTER != null
                 && plugin.getDBConfigHandler().getDatabaseType() == OMCDatabase.Type.REDIS
-                && ADAPTER instanceof RedisAdapter;
+                && ADAPTER instanceof OMCRedisAdapter;
     }
 
     public boolean isPostgreSQL() {
         return ADAPTER != null
                 && plugin.getDBConfigHandler().getDatabaseType() == OMCDatabase.Type.POSTGRESQL
-                && ADAPTER instanceof PostgresAdapter;
+                && ADAPTER instanceof OMCPostgresAdapter;
     }
 
     public boolean isSQLite() {
         return ADAPTER != null
                 && plugin.getDBConfigHandler().getDatabaseType() == OMCDatabase.Type.SQLITE
-                && ADAPTER instanceof SQLiteAdapter;
+                && ADAPTER instanceof OMCSQLiteAdapter;
     }
 
     public abstract OMCDatabase.Type initDatabase();

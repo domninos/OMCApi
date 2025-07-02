@@ -1,28 +1,29 @@
-package net.omc.database.postgres;
+package net.omc.database.flatfile;
 
 import net.omc.OMCPlugin;
 import net.omc.database.DatabaseAdapter;
 import net.omc.database.OMCDatabase;
-import net.omc.handlers.DatabaseHandler;
+import net.omc.handlers.OMCDatabaseHandler;
 
 import java.util.Map;
 
-public abstract class PostgresAdapter implements DatabaseAdapter {
+public abstract class OMCFlatFileAdapter implements DatabaseAdapter {
+    // extend this to implement
 
     private final OMCPlugin plugin;
-    private final PostgresDatabase database;
+    private final OMCFlatFileDatabase database;
 
-    public PostgresAdapter(OMCPlugin plugin, PostgresDatabase database) {
+    public OMCFlatFileAdapter(OMCPlugin plugin, OMCFlatFileDatabase database) {
         this.plugin = plugin;
         this.database = database;
     }
 
-    public static PostgresAdapter from(DatabaseAdapter adapter) {
-        return adapter instanceof PostgresAdapter ? ((PostgresAdapter) adapter) : null;
+    public static OMCFlatFileAdapter from(DatabaseAdapter adapter) {
+        return adapter instanceof OMCFlatFileAdapter ? ((OMCFlatFileAdapter) adapter) : null;
     }
 
-    public static PostgresAdapter adapt() {
-        return from(DatabaseHandler.ADAPTER);
+    public static OMCFlatFileAdapter adapt() {
+        return from(OMCDatabaseHandler.ADAPTER);
     }
 
     public abstract void initDatabase(); // boilerplate
@@ -33,9 +34,10 @@ public abstract class PostgresAdapter implements DatabaseAdapter {
 
     public abstract void setToCache(String playerName); // boilerplate
 
+
     @Override
     public boolean connect() {
-        return this.database.connectConfig();
+        return database.connect();
     }
 
     @Override
@@ -44,17 +46,13 @@ public abstract class PostgresAdapter implements DatabaseAdapter {
     }
 
     @Override
-    public boolean existsInDatabase(String playerName) { // inconsistent, use ISQLDatabase#handleExists(String)
-        return this.database.fetchExists(playerName);
+    public boolean existsInDatabase(String playerName) {
+        return database.has(playerName);
     }
 
     @Override
     public void savePlayer(String playerName, Boolean value) {
-        try {
-            this.database.savePlayer(playerName, value, true);
-        } catch (Exception e) {
-            plugin.error("Could not save database properly", e);
-        }
+        database.savePlayer(playerName, value); // SAVE TO FILE
     }
 
     @Override
@@ -65,13 +63,13 @@ public abstract class PostgresAdapter implements DatabaseAdapter {
                 plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
             }
         } catch (Exception e) {
-            plugin.error("Something went wrong closing database connection: ", e);
+            plugin.error("Something went wrong closing database: ", e);
         }
     }
 
     @Override
     public boolean getValue(String playerName) {
-        return this.database.fetchEnabled(playerName);
+        return this.database.getValue(playerName);
     }
 
     @Override
@@ -81,11 +79,11 @@ public abstract class PostgresAdapter implements DatabaseAdapter {
 
     @Override
     public OMCDatabase.Type getType() {
-        return OMCDatabase.Type.POSTGRESQL;
+        return OMCDatabase.Type.FLAT_FILE;
     }
 
     @Override
     public String toString() {
-        return "PostgreSQL";
+        return "FLAT-FILE";
     }
 }

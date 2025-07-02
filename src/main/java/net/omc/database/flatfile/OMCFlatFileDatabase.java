@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FlatFileDatabase implements OMCDatabase {
+public class OMCFlatFileDatabase implements OMCDatabase {
 
     private final File file;
     private final String fileName;
@@ -20,7 +20,7 @@ public class FlatFileDatabase implements OMCDatabase {
     private final OMCPlugin plugin;
 
 
-    public FlatFileDatabase(OMCPlugin plugin, String fileName) {
+    public OMCFlatFileDatabase(OMCPlugin plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.file = new File(plugin.getDataFolder().getPath() + "/" + fileName);
