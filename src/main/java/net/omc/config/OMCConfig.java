@@ -52,6 +52,9 @@ public class OMCConfig {
     }
 
     public void setNoSave(String path, Object obj) {
+        if (path == null || obj == null)
+            return;
+
         set(path, obj, false);
     }
 

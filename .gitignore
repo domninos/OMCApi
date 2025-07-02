@@ -4,3 +4,4 @@
 /.idea
 OMCLicense.iml
 dependency-reduced-pom.xml
+deploy-to-ghpages.sh

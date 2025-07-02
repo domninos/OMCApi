@@ -4,6 +4,7 @@ import net.omc.OMCPlugin;
 import net.omc.util.Flushable;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,20 +12,27 @@ public abstract class ConfigAbstract implements Flushable {
     private static final Map<String, String> STRING_VALUES = new ConcurrentHashMap<>(); // concurrent since it may be used on a different thread
     private static final Map<String, Integer> INT_VALUES = new ConcurrentHashMap<>(); // concurrent since it may be used on a different thread
     private static final Map<String, Boolean> BOOL_VALUES = new ConcurrentHashMap<>(); // concurrent since it may be used on a different thread
+    private static final Map<String, List<String>> STRING_LIST_VALUES = new ConcurrentHashMap<>();
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
     private OMCConfig omcConfig;
 
-    private ValueBuilder builder;
+    public ValueBuilder builder;
 
     public ConfigAbstract(OMCPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public ValueBuilder load() {
+    public abstract void initialize();
+
+    public void reload() {
+        omcConfig.reload();
+    }
+
+    public ValueBuilder load(OMCConfig config) {
         if (this.omcConfig == null)
-            this.omcConfig = plugin.getOMCConfig();
+            this.omcConfig = config;
 
         return getBuilder();
     }
@@ -41,6 +49,10 @@ public abstract class ConfigAbstract implements Flushable {
         return BOOL_VALUES.getOrDefault(path, false);
     }
 
+    public static List<String> getStringList(String path) {
+        return STRING_LIST_VALUES.getOrDefault(path, ValueDef.EMPTY_LIST);
+    }
+
     public abstract void saveToConfig();
 
     public FileConfiguration getConfig() {
@@ -52,7 +64,7 @@ public abstract class ConfigAbstract implements Flushable {
             this.omcConfig = plugin.getOMCConfig();
 
         if (this.builder == null)
-            this.builder = new ValueBuilder(this.omcConfig, STRING_VALUES, INT_VALUES, BOOL_VALUES);
+            this.builder = new ValueBuilder(this.omcConfig, STRING_VALUES, INT_VALUES, BOOL_VALUES, STRING_LIST_VALUES);
 
         return this.builder;
     }
@@ -62,5 +74,10 @@ public abstract class ConfigAbstract implements Flushable {
         STRING_VALUES.clear();
         INT_VALUES.clear();
         BOOL_VALUES.clear();
+
+        if (!STRING_LIST_VALUES.isEmpty())
+            STRING_LIST_VALUES.forEach((key, list) -> list.clear());
+
+        STRING_LIST_VALUES.clear();
     }
 }

@@ -2,6 +2,7 @@ package net.omc.config;
 
 import net.omc.util.MainUtil;
 
+import java.util.List;
 import java.util.Map;
 
 public class ValueBuilder {
@@ -10,24 +11,30 @@ public class ValueBuilder {
     private final Map<String, String> STRING_VALUES;
     private final Map<String, Integer> INT_VALUES;
     private final Map<String, Boolean> BOOL_VALUES;
+    private final Map<String, List<String>> STRING_LIST_VALUES;
 
     public ValueBuilder(OMCConfig config,
                         Map<String, String> STRING_VALUES,
                         Map<String, Integer> INT_VALUES,
-                        Map<String, Boolean> BOOL_VALUES) {
+                        Map<String, Boolean> BOOL_VALUES,
+                        Map<String, List<String>> STRING_LIST_VALUES) {
         this.config = config;
 
         this.STRING_VALUES = STRING_VALUES;
         this.INT_VALUES = INT_VALUES;
         this.BOOL_VALUES = BOOL_VALUES;
+        this.STRING_LIST_VALUES = STRING_LIST_VALUES;
     }
 
-    private boolean fromConfigYaml = false;
+    private boolean fromConfigYaml = true;
     private boolean fromPluginYaml = false;
     private boolean hasDef = false;
     private boolean hasSave = false;
 
     private void checkDefault(String path, ValueType type, ValueDef defaultValue) {
+        if (type == ValueType.NULL)
+            return;
+
         if (type == ValueType.STRING) {
             if (config.getString(path) == null) {
                 config.setNoSave(path, defaultValue.asString());
@@ -43,6 +50,11 @@ public class ValueBuilder {
                 config.setNoSave(path, defaultValue.asBool());
                 hasDef = true;
             }
+        } else if (type == ValueType.STRING_LIST) {
+            if (config.getConfig().getStringList(path).isEmpty()) {
+                config.setNoSave(path, defaultValue.asStringList());
+                hasDef = true;
+            }
         }
     }
 
@@ -55,9 +67,10 @@ public class ValueBuilder {
                 STRING_VALUES.put(path, config.getString(path));
             else if (type == ValueType.INT)
                 INT_VALUES.put(path, config.getInt(path));
-            else if (type == ValueType.BOOLEAN)
+            else if (type == ValueType.BOOLEAN || type == ValueType.NULL)
                 BOOL_VALUES.put(path, config.getBool(path));
-
+            else if (type == ValueType.STRING_LIST)
+                STRING_LIST_VALUES.put(path, config.getConfig().getStringList(path));
 
         } else if (fromPluginYaml) {
             if (type == ValueType.PLUGIN_NAME)
@@ -82,6 +95,11 @@ public class ValueBuilder {
         return load(path, type, ValueDef.from(def));
     }
 
+    public ValueBuilder load(String path, ValueType type, List<String> def) {
+        return load(path, type, ValueDef.from(def));
+    }
+
+
     public ValueBuilder fromConfig() {
         this.fromPluginYaml = false;
         this.fromConfigYaml = true;
@@ -103,8 +121,18 @@ public class ValueBuilder {
             config.setNoSave(path, INT_VALUES.getOrDefault(path, -1));
         else if (type == ValueType.BOOLEAN)
             config.setNoSave(path, BOOL_VALUES.getOrDefault(path, false));
+        else if (type == ValueType.STRING_LIST)
+            config.setNoSave(path, STRING_LIST_VALUES.getOrDefault(path, ValueDef.EMPTY_LIST));
 
         return this;
+    }
+
+    public void saveAll() {
+        STRING_VALUES.forEach(config::setNoSave);
+        INT_VALUES.forEach(config::setNoSave);
+        BOOL_VALUES.forEach(config::setNoSave);
+        STRING_LIST_VALUES.forEach(config::setNoSave);
+        config.save();
     }
 
     public ValueBuilder save() {

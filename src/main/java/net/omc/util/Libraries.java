@@ -1,0 +1,45 @@
+package net.omc.util;
+
+import net.omc.OMCPlugin;
+
+import java.io.File;
+
+public enum Libraries {
+    JSON("org/json"),
+    HIKARICP("com/zaxxer/HikariCP"),
+    PROJECT_REACTOR("io/projectreactor"),
+    REACTIVE_STREAMS("org/reactivestreams"),
+    REDIS("io/lettuce/lettuce-core"),
+    POSTGRESQL("org/postgresql"),
+    SQLITE("org/xerial/sqlite-jdbc"),
+    FLAT_FILE("");
+
+    private final String path;
+
+    private File directory;
+
+    private boolean loaded = false;
+
+    Libraries(String path) {
+        this.path = path;
+    }
+
+    public void load(File pluginFolder) {
+        this.loaded = true;
+
+        if (directory == null)
+            this.directory = new File(pluginFolder + "/lib/" + this.path);
+    }
+
+    public boolean isLoaded(OMCPlugin plugin) {
+        if (this == FLAT_FILE) // is flat file, no libraries
+            return true;
+
+        if (this == POSTGRESQL) {
+            if (!HIKARICP.isLoaded(plugin))
+                plugin.sendConsole("&cHikariCP is needed for connection pooling (PostgreSQL)");
+        }
+
+        return this.loaded;
+    }
+}
