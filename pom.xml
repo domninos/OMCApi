@@ -1,73 +1,68 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.omni</groupId>
+    <groupId>net.omc</groupId>
     <artifactId>OMCLicense</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>OMCLicense</name>
+    <description>A private Maven package hosted on GitHub Pages</description>
+    <url>https://github.com/domninos/OMCLicense</url>
 
-    <properties>
-        <java.version>17</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/domninos/OMCLicense.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:domninos/OMCLicense.git</developerConnection>
+        <url>https://github.com/domninos/OMCLicense</url>
+    </scm>
 
     <distributionManagement>
         <repository>
-            <id>internal.repo</id>
-            <name>OMCLicense Repo</name>
-            <url>file://${project.build.directory}/mvn-artifact</url>
+            <id>github-pages</id>
+            <url>https://domninos.github.io/OMCLicense</url>
         </repository>
     </distributionManagement>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
     <build>
-        <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.1.1</version>
                 <configuration>
-                    <altDeploymentRepository>
-                        internal.repo::file://${project.build.directory}/mvn-artifact
-                    </altDeploymentRepository>
+                    <altDeploymentRepository>github-pages::default::file://${project.build.directory}/../docs</altDeploymentRepository>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -89,7 +84,6 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20250517</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
