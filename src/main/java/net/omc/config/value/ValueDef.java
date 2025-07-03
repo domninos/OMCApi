@@ -1,4 +1,4 @@
-package net.omc.config;
+package net.omc.config.value;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,15 +34,28 @@ public class ValueDef {
     }
 
     public String asString() {
-        return (String) value;
+        return value != null ? value.toString() : "";
     }
 
     public int asInt() {
-        return (int) value;
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        } else if (value instanceof String s) {
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+        return 0;
     }
 
     public boolean asBool() {
-        return (boolean) value;
+        if (value instanceof Boolean)
+            return (Boolean) value;
+        if (value instanceof String s)
+            return Boolean.parseBoolean(s);
+        return false;
     }
 
     public List<String> asStringList() {
@@ -52,4 +65,7 @@ public class ValueDef {
         return EMPTY_LIST;
     }
 
+    public Object getValue() {
+        return value;
+    }
 }

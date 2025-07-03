@@ -10,8 +10,8 @@ import java.util.Map;
 public abstract class OMCFlatFileAdapter implements DatabaseAdapter {
     // extend this to implement
 
-    private final OMCPlugin plugin;
-    private final OMCFlatFileDatabase database;
+    public final OMCPlugin plugin;
+    public final OMCFlatFileDatabase database;
 
     public OMCFlatFileAdapter(OMCPlugin plugin, OMCFlatFileDatabase database) {
         this.plugin = plugin;
@@ -60,7 +60,7 @@ public abstract class OMCFlatFileAdapter implements DatabaseAdapter {
         try {
             if (isEnabled()) {
                 database.close();
-                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected());
             }
         } catch (Exception e) {
             plugin.error("Something went wrong closing database: ", e);

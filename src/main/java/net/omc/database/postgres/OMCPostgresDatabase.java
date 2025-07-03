@@ -24,7 +24,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
 
     private final String tableName;
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
     public OMCPostgresDatabase(OMCPlugin plugin, String tableName) {
         this.plugin = plugin;
@@ -36,7 +36,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
         this.host = host;
 
         if (isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectedAlready(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectedAlready());
             return false;
         }
 
@@ -46,7 +46,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
             Connection connection = plugin.getHikariManager().getConnection();
 
             if (connection != null) {
-                plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host, getType()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host));
 
                 checkTable();
 
@@ -56,7 +56,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
                 this.host = host;
             }
         } catch (Exception e) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful(getType()), e);
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful(), e);
             return false;
         }
 
@@ -107,7 +107,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public CompletableFuture<Boolean> exists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return null;
         }
 
@@ -137,7 +137,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void savePlayer(String playerName, Boolean value, boolean async) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -150,7 +150,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void saveCallbackMap(Map<String, Boolean> enabledPlayers) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -172,7 +172,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
             stmt.executeBatch();
             connection.commit();
 
-            plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved(getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved());
         } catch (SQLException e) {
             plugin.error("Something went wrong saving database.", e);
         }
@@ -181,7 +181,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void saveCallback(String playerName, Boolean value) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -201,7 +201,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void handleExists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -219,7 +219,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void insert(String playerName, Boolean value) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -240,7 +240,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public CompletableFuture<Boolean> get(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return null;
         }
 
@@ -284,7 +284,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public void saveMap(Map<String, Boolean> enabledPlayers, boolean async) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -297,7 +297,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public boolean fetchExists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return false;
         }
 
@@ -312,7 +312,7 @@ public abstract class OMCPostgresDatabase implements OMCDatabase, ISQLDatabase, 
     @Override
     public boolean fetchEnabled(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return false;
         }
 

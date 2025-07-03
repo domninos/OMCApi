@@ -17,7 +17,7 @@ public class OMCFlatFileDatabase implements OMCDatabase {
     private Map<String, Boolean> cache;  // boilerplate
     private boolean enabled = false;
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
 
     public OMCFlatFileDatabase(OMCPlugin plugin, String fileName) {
@@ -28,8 +28,7 @@ public class OMCFlatFileDatabase implements OMCDatabase {
 
     public void checkFile() {
         try {
-            if (file.createNewFile())
-                plugin.sendConsole("&7Created " + fileName);
+            file.createNewFile();
         } catch (IOException e) {
             plugin.error("Could not initialize database", e);
         }

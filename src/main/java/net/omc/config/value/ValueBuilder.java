@@ -1,5 +1,6 @@
-package net.omc.config;
+package net.omc.config.value;
 
+import net.omc.config.OMCConfig;
 import net.omc.util.MainUtil;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class ValueBuilder {
     private boolean hasSave = false;
 
     private void checkDefault(String path, ValueType type, ValueDef defaultValue) {
-        if (type == ValueType.NULL)
+        if (type == ValueType.NULL || defaultValue == null || defaultValue.getValue() == null)
             return;
 
         if (type == ValueType.STRING) {
@@ -80,6 +81,7 @@ public class ValueBuilder {
             else if (type == ValueType.PLUGIN_API)
                 STRING_VALUES.put(path, MainUtil.VERSION >= 13 ? config.getPlugin().getDescription().getAPIVersion() : MainUtil.FULL_VERSION);
         }
+
         return this;
     }
 
@@ -99,7 +101,6 @@ public class ValueBuilder {
         return load(path, type, ValueDef.from(def));
     }
 
-
     public ValueBuilder fromConfig() {
         this.fromPluginYaml = false;
         this.fromConfigYaml = true;
@@ -113,16 +114,44 @@ public class ValueBuilder {
     }
 
     public ValueBuilder toSave(String path, ValueType type) {
+        if (type == ValueType.STRING)
+            return toSave(path, type, ValueDef.from(STRING_VALUES.getOrDefault(path, "N/A")));
+        else if (type == ValueType.INT)
+            return toSave(path, type, ValueDef.from(INT_VALUES.getOrDefault(path, -1)));
+        else if (type == ValueType.BOOLEAN)
+            return toSave(path, type, ValueDef.from(BOOL_VALUES.getOrDefault(path, false)));
+        else if (type == ValueType.STRING_LIST)
+            return toSave(path, type, ValueDef.from(STRING_LIST_VALUES.getOrDefault(path, ValueDef.EMPTY_LIST)));
+
+        return this;
+    }
+
+    public ValueBuilder toSave(String path, ValueType type, ValueDef value) {
         this.hasSave = true;
 
         if (type == ValueType.STRING)
-            config.setNoSave(path, STRING_VALUES.getOrDefault(path, "N/A"));
+            config.setNoSave(path, value.asString());
         else if (type == ValueType.INT)
-            config.setNoSave(path, INT_VALUES.getOrDefault(path, -1));
+            config.setNoSave(path, value.asInt());
         else if (type == ValueType.BOOLEAN)
-            config.setNoSave(path, BOOL_VALUES.getOrDefault(path, false));
+            config.setNoSave(path, value.asBool());
         else if (type == ValueType.STRING_LIST)
-            config.setNoSave(path, STRING_LIST_VALUES.getOrDefault(path, ValueDef.EMPTY_LIST));
+            config.setNoSave(path, value.asStringList());
+
+        set(path, type, value);
+
+        return this;
+    }
+
+    public ValueBuilder set(String path, ValueType type, ValueDef value) {
+        if (type == ValueType.STRING)
+            STRING_VALUES.put(path, value.asString());
+        else if (type == ValueType.INT)
+            INT_VALUES.put(path, value.asInt());
+        else if (type == ValueType.BOOLEAN)
+            BOOL_VALUES.put(path, value.asBool());
+        else if (type == ValueType.STRING_LIST)
+            STRING_LIST_VALUES.put(path, value.asStringList());
 
         return this;
     }

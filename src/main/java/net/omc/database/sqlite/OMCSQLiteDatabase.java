@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQLCredentialLess {
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
     private final File db_file;
     private final String urlString;
 
@@ -50,7 +50,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
 
             this.enabled = true;
 
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host, getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host));
 
             return true;
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public CompletableFuture<Boolean> get(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return null;
         }
 
@@ -121,7 +121,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void insert(String playerName, Boolean value) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -141,7 +141,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public CompletableFuture<Boolean> exists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return null;
         }
 
@@ -171,7 +171,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void saveMap(Map<String, Boolean> enabledPlayers, boolean async) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -184,7 +184,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void saveCallbackMap(Map<String, Boolean> enabledPlayers) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -206,7 +206,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
             stmt.executeBatch();
             connection.commit();
 
-            plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved(getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved());
         } catch (SQLException e) {
             plugin.error("Something went wrong saving database.", e);
         }
@@ -215,7 +215,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void savePlayer(String playerName, Boolean value, boolean async) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -228,7 +228,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void saveCallback(String playerName, Boolean value) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -248,7 +248,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public void handleExists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -266,7 +266,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public boolean fetchExists(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return false;
         }
 
@@ -281,7 +281,7 @@ public abstract class OMCSQLiteDatabase implements OMCDatabase, ISQLDatabase, SQ
     @Override
     public boolean fetchEnabled(String playerName) {
         if (!isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return false;
         }
 

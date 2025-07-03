@@ -1,10 +1,9 @@
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\ConfigAbstract.java
-D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\ConfigBuilder.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\LicenseConfig.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\OMCConfig.java
-D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\ValueBuilder.java
-D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\ValueDef.java
-D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\ValueType.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\value\ValueBuilder.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\value\ValueDef.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\config\value\ValueType.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\DatabaseAdapter.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\flatfile\OMCFlatFileAdapter.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\flatfile\OMCFlatFileDatabase.java

@@ -86,11 +86,9 @@ public class OMCConfig {
         if (!file.exists()) {
             if (res) {
                 plugin.saveResource(fileName, false);
-                plugin.sendConsole("&aSuccessfully created " + fileName);
             } else {
                 try {
-                    if (file.createNewFile())
-                        plugin.sendConsole("&aSuccessfully created " + fileName);
+                    file.createNewFile();
                 } catch (IOException e) {
                     plugin.error("Something went wrong creating " + fileName, e);
                 }

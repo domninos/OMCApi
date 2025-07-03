@@ -13,22 +13,27 @@ public interface OMCDatabase {
     String getType();
 
     enum Type {
-        REDIS("redis", Libraries.REDIS),
-        FLAT_FILE("flat-file", Libraries.FLAT_FILE),
-        POSTGRESQL("postgresql", Libraries.POSTGRESQL),
-        SQLITE("sqlite", Libraries.SQLITE);
+        REDIS("redis", Libraries.REDIS, "Redis"),
+        FLAT_FILE("flat-file", Libraries.FLAT_FILE, "Flat-File"),
+        POSTGRESQL("postgresql", Libraries.POSTGRESQL, "PostgreSQL"),
+        SQLITE("sqlite", Libraries.SQLITE, "SQLite");
 
-        private final String label;
+        private final String label, formal;
 
         private final Libraries lib;
 
-        Type(String label, Libraries lib) {
+        Type(String label, Libraries lib, String formal) {
             this.label = label;
             this.lib = lib;
+            this.formal = formal;
         }
 
         public String getLabel() {
             return label;
+        }
+
+        public String getFormal() {
+            return formal;
         }
 
         public boolean isLoaded(OMCPlugin plugin) {

@@ -24,13 +24,15 @@ public abstract class OMCPlugin extends JavaPlugin implements Flushable {
 
     public abstract void registerCommands();
 
-    public abstract String getNetworkPrefix();
+    public abstract String getPrefix();
 
-    public abstract void saveResource(String fileName, boolean b);
+    public abstract String getNetworkPrefix();
 
     public abstract OMCConfig getOMCConfig();
 
     public abstract OMCDatabaseHandler getDatabaseHandler();
+
+    public abstract void stopLibraryExecutor();
 
     public HikariManager getHikariManager() {
         return getAPI().getHikariManager(this);
@@ -67,7 +69,7 @@ public abstract class OMCPlugin extends JavaPlugin implements Flushable {
     }
 
     public void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(translate(message));// TODO prefix
+        sender.sendMessage(translate(getPrefix() + " " + message));
     }
 
     public String translate(String text) {

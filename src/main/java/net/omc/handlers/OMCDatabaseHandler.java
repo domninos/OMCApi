@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 
 public abstract class OMCDatabaseHandler {
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
     private int updates = 0;
 
@@ -69,11 +69,11 @@ public abstract class OMCDatabaseHandler {
 
     public void savePlayer(String playerName, Boolean value, boolean async) {
         if (!isEnabled()) {
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled(plugin.getDBConfigHandler().getDatabaseType().getLabel()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
         if (ADAPTER == null) {
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful(plugin.getDBConfigHandler().getDatabaseType().getLabel()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful());
             return;
         }
 

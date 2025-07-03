@@ -14,15 +14,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class LibraryHandler {
-    private final OMCPlugin plugin;
-
-    private final BukkitLibraryManager libraryManager;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    private final OMCPlugin plugin;
+    private String libsPath;
+
+    private BukkitLibraryManager libraryManager;
+
     public LibraryHandler(OMCPlugin plugin) {
         this.plugin = plugin;
-        this.libraryManager = new BukkitLibraryManager(plugin);
+    }
+
+    public void setLibraryPath(String path) {
+        this.libsPath = path;
     }
 
     public void loadLibraries(OMCDatabase.Type type) throws ExecutionException, InterruptedException {
@@ -58,7 +63,7 @@ public class LibraryHandler {
                     .groupId("org{}xerial")
                     .artifactId("sqlite-jdbc")
                     .version("3.49.1.0")
-                    .relocate("org{}sqlite", "net{}omni{}nearChat{}libs{}org{}xerial")
+                    .relocate("org{}sqlite", libsPath + "{}org{}xerial")
                     .build();
 
             libraryManager.loadLibrary(sqlite);
@@ -77,7 +82,7 @@ public class LibraryHandler {
                     .groupId("org{}postgresql")
                     .artifactId("postgresql")
                     .version("42.7.7")
-                    .relocate("org{}postgresql", "net{}omni{}nearChat{}libs{}org{}postgresql")
+                    .relocate("org{}postgresql", libsPath + "{}org{}postgresql")
                     .build();
 
             libraryManager.loadLibrary(postgres);
@@ -107,7 +112,7 @@ public class LibraryHandler {
                     .version("6.6.0.RELEASE")
                     .id("AlessioDP")
                     .repository("https://repo.alessiodp.com/releases/")
-                    .relocate("io{}lettuce{}core", "net{}omni{}nearChat{}libs{}io{}lettuce{}core")
+                    .relocate("io{}lettuce{}core", libsPath + "{}io{}lettuce{}core")
                     .build();
 
             libraryManager.loadLibrary(reactivestreams);
@@ -123,12 +128,14 @@ public class LibraryHandler {
     }
 
     public void ensureMainLibraries() {
+        this.libraryManager = new BukkitLibraryManager(plugin);
+
         libraryManager.addMavenCentral();
         libraryManager.addSonatype();
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                loadPostgresLib(false).get();
+                loadSQLiteLibraries().get();
             } catch (InterruptedException | ExecutionException e) {
                 plugin.error("Something went wrong loading postgresql.", e);
             }
@@ -141,7 +148,7 @@ public class LibraryHandler {
                 .groupId("com{}zaxxer")
                 .artifactId("HikariCP")
                 .version("6.3.0")
-                .relocate("com{}zaxxer{}hikari", "net{}omni{}nearChat{}libs{}com{}zaxxer{}hikari")
+                .relocate("com{}zaxxer{}hikari", libsPath + "{}com{}zaxxer{}hikari")
                 .build();
 
         libraryManager.loadLibrary(hikaricp);
@@ -157,7 +164,7 @@ public class LibraryHandler {
                     .groupId("org{}json")
                     .artifactId("json")
                     .version("20250517")
-                    .relocate("org{}json", "net{}omni{}nearChat{}libs{}org{}json")
+                    .relocate("org{}json", libsPath + "{}org{}json")
                     .build();
 
             libraryManager.loadLibrary(json);

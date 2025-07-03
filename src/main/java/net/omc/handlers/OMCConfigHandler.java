@@ -1,7 +1,9 @@
 package net.omc.handlers;
 
 import net.omc.OMCPlugin;
-import net.omc.config.*;
+import net.omc.config.ConfigAbstract;
+import net.omc.config.value.ValueDef;
+import net.omc.config.value.ValueType;
 import net.omc.database.OMCDatabase;
 
 public class OMCConfigHandler extends ConfigAbstract {
@@ -11,8 +13,6 @@ public class OMCConfigHandler extends ConfigAbstract {
 
     @Override
     public void initialize() {
-        ValueBuilder builder = load(new OMCConfig(plugin, "config.yml", true));
-
         builder.fromConfig()
                 .load("host", ValueType.STRING, "<put database host here>")
                 .load("port", ValueType.INT, 0)
@@ -24,11 +24,21 @@ public class OMCConfigHandler extends ConfigAbstract {
                 .load("dev", ValueType.BOOLEAN, ValueDef.none())
                 .save();
     }
+
     public OMCDatabase.Type getDatabaseType() {
         return OMCDatabase.Type.valueOf(getString("database-type").toUpperCase().replace("-", "_"));
     }
 
+    public void setDatabase(OMCDatabase.Type type) {
+        builder.fromConfig().toSave("database-type", ValueType.STRING, ValueDef.from(type.getLabel())).save();
+    }
+
     public boolean checkDev() {
+        if (getBool("dev")) {
+            if (getConfig().getString("dev") == null)
+                builder.set("dev", ValueType.BOOLEAN, ValueDef.from(false));
+        }
+
         return getBool("dev");
     }
 

@@ -9,9 +9,9 @@ import java.util.Map;
 
 public abstract class OMCSQLiteAdapter implements DatabaseAdapter {
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
-    private final OMCSQLiteDatabase database;
+    public final OMCSQLiteDatabase database;
 
     public OMCSQLiteAdapter(OMCPlugin plugin, OMCSQLiteDatabase database) {
         this.plugin = plugin;
@@ -71,7 +71,7 @@ public abstract class OMCSQLiteAdapter implements DatabaseAdapter {
         try {
             if (isEnabled()) {
                 database.close();
-                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected());
             }
         } catch (Exception e) {
             plugin.error("Something went wrong closing database connection: ", e);

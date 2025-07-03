@@ -15,13 +15,10 @@ import java.net.UnknownHostException;
   TODO:
      License plugin.
         Add license text on all classes
-
-
-  TODO: make this into a maven repository hosted on github for free
  */
 public class LicenseManager {
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
     private final CacheManager cacheManager;
 

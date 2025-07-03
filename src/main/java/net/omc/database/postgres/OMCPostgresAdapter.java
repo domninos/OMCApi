@@ -9,8 +9,8 @@ import java.util.Map;
 
 public abstract class OMCPostgresAdapter implements DatabaseAdapter {
 
-    private final OMCPlugin plugin;
-    private final OMCPostgresDatabase database;
+    public final OMCPlugin plugin;
+    public final OMCPostgresDatabase database;
 
     public OMCPostgresAdapter(OMCPlugin plugin, OMCPostgresDatabase database) {
         this.plugin = plugin;
@@ -62,7 +62,7 @@ public abstract class OMCPostgresAdapter implements DatabaseAdapter {
         try {
             if (isEnabled()) {
                 database.close();
-                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected());
             }
         } catch (Exception e) {
             plugin.error("Something went wrong closing database connection: ", e);

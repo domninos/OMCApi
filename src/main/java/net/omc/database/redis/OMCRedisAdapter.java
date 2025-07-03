@@ -9,9 +9,9 @@ import java.util.Map;
 
 public abstract class OMCRedisAdapter implements DatabaseAdapter {
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
-    private final OMCRedisDatabase redis;
+    public final OMCRedisDatabase redis;
 
     public OMCRedisAdapter(OMCPlugin plugin, OMCRedisDatabase redis) {
         this.plugin = plugin;
@@ -62,7 +62,7 @@ public abstract class OMCRedisAdapter implements DatabaseAdapter {
         try {
             if (isEnabled()) {
                 redis.close();
-                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected(toString()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDBDisconnected());
             }
         } catch (Exception e) {
             plugin.error("Something went wrong closing database connection: ", e);

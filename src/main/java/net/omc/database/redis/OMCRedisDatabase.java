@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class OMCRedisDatabase implements OMCDatabase {
 
-    private final OMCPlugin plugin;
+    public final OMCPlugin plugin;
 
-    private final String KEY;
+    public final String KEY;
 
-    private RedisClient client;
-    private StatefulRedisConnection<String, String> connection;
+    public RedisClient client;
+    public StatefulRedisConnection<String, String> connection;
 
-    private boolean enabled = false;
+    public boolean enabled = false;
 
     public OMCRedisDatabase(OMCPlugin plugin, String key) {
         this.plugin = plugin;
@@ -28,7 +28,7 @@ public class OMCRedisDatabase implements OMCDatabase {
 
     public boolean connect(String host, int port, String user, char[] password) {
         if (isEnabled()) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectedAlready(getType()));
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectedAlready());
             return false;
         }
 
@@ -40,13 +40,13 @@ public class OMCRedisDatabase implements OMCDatabase {
             client = RedisClient.create(redisUri);
             connection = client.connect();
 
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host, getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBConnectedConsole(host));
 
             connection.async().clientCaching(true); // TODO research
 
             this.enabled = true;
         } catch (RedisConnectionException e) {
-            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful(getType()), e);
+            plugin.error(plugin.getDBMessageHandler().getDBErrorConnectUnsuccessful(), e);
 
             if (connection != null)
                 connection.close();
@@ -100,7 +100,7 @@ public class OMCRedisDatabase implements OMCDatabase {
 
     public void syncSet(RedisCommands<String, String> sync, String key, String value) {
         if (!isEnabled()) {
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -113,7 +113,7 @@ public class OMCRedisDatabase implements OMCDatabase {
 
     public void syncHashSet(RedisCommands<String, String> sync, String key, String field, String value) {
         if (!isEnabled()) {
-            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled(getType()));
+            plugin.sendConsole(plugin.getDBMessageHandler().getDBErrorConnectDisabled());
             return;
         }
 
@@ -215,7 +215,7 @@ public class OMCRedisDatabase implements OMCDatabase {
                 }
 
                 async.save();
-                plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved(getType()));
+                plugin.sendConsole(plugin.getDBMessageHandler().getDatabaseSaved());
             });
         } catch (RedisException e) {
             plugin.error("Could not exec multiple properly.", e);
