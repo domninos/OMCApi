@@ -1,23 +1,21 @@
 package net.omc.license;
 
+import net.omc.handlers.HttpHandler;
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 
 public class LicenseValidator {
-
-    // no need to close. HttpClient closes automatically.
-    private static final HttpClient client = HttpClient.newHttpClient();
+//
+//    public static void main(String[] args) {
+//        System.out.println(checkLicense("nearchat", "0123", "192.1691.1.1"));
+//    }
 
 
     // bought_by should be updated separately. use it through discord bot. /license update <key> <key> <value>
 
     public static Status activateLicense(String plugin, String network_id, String license, String status, String ip) {
-
         String url = "https://mxnuzxiklpdxrgapuusx.supabase.co/rest/v1/rpc/activate_license_wrapper";
 
         String jsonPayload = String.format(
@@ -26,11 +24,11 @@ public class LicenseValidator {
         );
 
         try {
-            HttpRequest request = buildRequest(url)
+            HttpRequest request = HttpHandler.buildRequest(url, HttpHandler.Type.SB)
                     .method("POST", HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HttpHandler.getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             JSONObject object = new JSONObject(response.body());
 
@@ -52,11 +50,11 @@ public class LicenseValidator {
         );
 
         try {
-            HttpRequest request = buildRequest(url)
+            HttpRequest request = HttpHandler.buildRequest(url, HttpHandler.Type.SB)
                     .method("POST", HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HttpHandler.getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             JSONObject object = new JSONObject(response.body());
 
@@ -65,18 +63,6 @@ public class LicenseValidator {
         }
 
         return Status.NULL;
-    }
-
-    private static HttpRequest.Builder buildRequest(String url) {
-        return HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .header("Authorization", "Bearer sb_publishable_XPx-LFkL3eYQwPdXjiO22Q_YTm9k_cG")
-                .header("apikey", "sb_publishable_XPx-LFkL3eYQwPdXjiO22Q_YTm9k_cG")
-                .header("Content-Profile", "public")
-                .header("Accept-Profile", "public")
-                .timeout(Duration.ofSeconds(30));
     }
 
 }

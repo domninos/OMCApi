@@ -5,7 +5,9 @@ import net.omc.handlers.LibraryHandler;
 import net.omc.handlers.OMCConfigHandler;
 import net.omc.handlers.OMCDatabaseHandler;
 import net.omc.handlers.OMCMessageHandler;
+import net.omc.managers.GitManager;
 import net.omc.managers.HikariManager;
+import net.omc.managers.VersionManager;
 import net.omc.util.Flushable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +35,14 @@ public abstract class OMCPlugin extends JavaPlugin implements Flushable {
     public abstract OMCDatabaseHandler getDatabaseHandler();
 
     public abstract void stopLibraryExecutor();
+
+    public VersionManager getVersionManager() {
+        return getAPI().getVersionManager(this);
+    }
+
+    public GitManager getGitManager() {
+        return getAPI().getGitManager(this);
+    }
 
     public HikariManager getHikariManager() {
         return getAPI().getHikariManager(this);

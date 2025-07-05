@@ -3,8 +3,10 @@ package net.omc;
 import net.omc.handlers.LibraryHandler;
 import net.omc.handlers.OMCConfigHandler;
 import net.omc.handlers.OMCMessageHandler;
+import net.omc.managers.GitManager;
 import net.omc.managers.HikariManager;
 import net.omc.managers.LicenseManager;
+import net.omc.managers.VersionManager;
 
 // OMC Plugins API
 public class OMCApi {
@@ -21,6 +23,9 @@ public class OMCApi {
     private OMCConfigHandler OMCConfigHandler;
     private LibraryHandler libraryHandler;
 
+    private GitManager gitManager;
+    private VersionManager versionManager;
+
     private OMCApi() {
     }
 
@@ -29,11 +34,26 @@ public class OMCApi {
         return INSTANCE;
     }
 
+
     public LicenseManager loadLicense(OMCPlugin plugin) {
         if (this.licenseManager == null)
             this.licenseManager = new LicenseManager(plugin);
 
         return this.licenseManager;
+    }
+
+    public VersionManager getVersionManager(OMCPlugin plugin) {
+        if (this.versionManager == null)
+            this.versionManager = new VersionManager(plugin);
+
+        return this.versionManager;
+    }
+
+    public GitManager getGitManager(OMCPlugin plugin) {
+        if (this.gitManager == null)
+            this.gitManager = new GitManager(plugin);
+
+        return this.gitManager;
     }
 
     public OMCMessageHandler getDBMessageHandler(OMCPlugin plugin) {

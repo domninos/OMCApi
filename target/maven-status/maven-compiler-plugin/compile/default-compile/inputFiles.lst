@@ -17,6 +17,7 @@ D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\SQLCredentialLess.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\SQLCredentials.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\sqlite\OMCSQLiteAdapter.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\database\sqlite\OMCSQLiteDatabase.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\handlers\HttpHandler.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\handlers\LibraryHandler.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\handlers\OMCConfigHandler.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\handlers\OMCDatabaseHandler.java
@@ -26,8 +27,10 @@ D:\IdeaProjects\OMCLicense\src\main\java\net\omc\license\LicenseValidator.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\license\NetworkIdGenerator.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\license\Status.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\managers\CacheManager.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\managers\GitManager.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\managers\HikariManager.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\managers\LicenseManager.java
+D:\IdeaProjects\OMCLicense\src\main\java\net\omc\managers\VersionManager.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\OMCApi.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\OMCPlugin.java
 D:\IdeaProjects\OMCLicense\src\main\java\net\omc\util\Cryptography.java
