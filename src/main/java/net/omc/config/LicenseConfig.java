@@ -38,8 +38,10 @@ public class LicenseConfig {
             }
         }
 
-        if (set)
+        if (!read.isEmpty() && set)
             this.data = new JSONObject(read.toString());
+        else
+            this.data = new JSONObject();
 
         return read.toString();
     }

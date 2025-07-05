@@ -40,7 +40,7 @@ public class GitManager {
                 return object.getString("tag_name");
             }
 
-            plugin.error("Something went wrong while checking for updates. HTTP Code: " + response.statusCode());
+            plugin.error("Something went wrong while checking for updates. (" + response.statusCode() + ")");
         } catch (IOException | InterruptedException e) {
             plugin.error("Something went wrong while checking for updates.", e);
         }

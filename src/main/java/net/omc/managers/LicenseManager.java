@@ -19,6 +19,7 @@ import java.net.UnknownHostException;
 public class LicenseManager {
 
     public final OMCPlugin plugin;
+    private final OMCConfig config;
 
     private final CacheManager cacheManager;
 
@@ -27,45 +28,54 @@ public class LicenseManager {
     private License license;
     private String networkId;
 
+    // make this work first before
+    //        * database to implement: mysql, mariadb, mongodb
+
     public LicenseManager(OMCPlugin plugin) {
         this.plugin = plugin;
+        this.config = plugin.getOMCConfig();
+
         this.cacheManager = new CacheManager(plugin);
 
         this.networkIdGenerator = new NetworkIdGenerator(plugin.getNetworkPrefix());
     }
 
-    public void loadLicenseFromConfig(OMCConfig config) {
+    public void setup() {
+        if (config.getString("network_id") == null) {
+            this.networkId = generateNetworkId();
+
+            config.set("network_id", networkId);
+        }
+
+        String loaded = loadLicenseFromConfig();
+        Status status = loadLicense(loaded);
+
+        if (status == Status.REVOKED)
+            plugin.sendConsole("&cYou are using an invalid license.");
+    }
+
+    private String loadLicenseFromConfig() {
         if (config == null)
-            return;
+            return "NULL";
 
-        String license = config.getString("license");
+        if (config.getString("license") == null)
+            config.set("license", "unset"); // default
 
-        if (license == null) {
-        }
-
-//        this.license = new License(Status.NULL);
+        return config.getString("license");
     }
 
-    // this should be set in config.yml
     private String generateNetworkId() {
-        return networkIdGenerator.nextId();
-    }
-
-    public String getNetworkId(OMCConfig config) {
-        if (this.networkId == null) {
-            if (config.getString("network_id") != null) {
-                this.networkId = config.getString("network_id");
-            } else {
-                this.networkId = generateNetworkId();
-
-                config.set("network_id", this.networkId); // auto save
-            }
-        }
+        if (this.networkId == null)
+            this.networkId = networkIdGenerator.nextId();
 
         return this.networkId;
     }
 
-    public String getIp() {
+    public String getNetworkId() {
+        return config.getString("network_id");
+    }
+
+    private String getIp() {
         String serverIP = Bukkit.getIp();
 
         try {
@@ -77,30 +87,61 @@ public class LicenseManager {
         }
     }
 
-    public void loadLicense(String network_id, String ip) {
+    private Status loadLicense(String key) {
         cacheManager.loadCache();
 
         if (!cacheManager.isCacheValid()) {
-            Status status = LicenseValidator.checkLicense(plugin.getDescription().getName(), network_id, ip);
+            Status status = LicenseValidator.checkLicense(plugin.getDescription().getName().toLowerCase(), key);
 
-            if (status != Status.NULL) {
+            if (status != Status.NULL && status != Status.REVOKED) {
                 this.license = new License(status);
+                license.setKey(loadLicenseFromConfig());
 
                 cacheManager.revalidateCache();
             } else {
                 // stop caching
                 cacheManager.invalidate();
             }
+
+            return status;
         }
+
+        return Status.NULL;
     }
 
-    public boolean setLicense(OMCPlugin plugin, String license) {
-        // TODO run this on /nc license <plugin>
-
-        if (license == null || license.isEmpty())
+    public boolean activateLicense(String key) {
+        if (key == null || key.isEmpty())
             return false;
 
-        return false;
+        String loaded = loadLicenseFromConfig();
+
+        if (loaded != null && loaded.equals("unset")) {
+            plugin.sendConsole("&cLicense already set.");
+            return false;
+        }
+
+        // check if license is already activated
+
+        if (license == null)
+            this.license = new License(Status.ACTIVE);
+
+        license.setKey(key);
+
+        String network_id = getNetworkId();
+
+        Status status = LicenseValidator.activateLicense(
+                plugin.getDescription().getName().toLowerCase(), network_id, key, Status.ACTIVE.name(), getIp());
+
+        if (status == Status.DUPLICATE) {
+            plugin.sendConsole("&aLicense already activated.");
+            return false;
+        }
+
+        config.setNoSave("network_id", network_id);
+        config.setNoSave("license", key);
+        config.save();
+
+        return status != Status.NULL;
     }
 
     public boolean isLicenseValid() {

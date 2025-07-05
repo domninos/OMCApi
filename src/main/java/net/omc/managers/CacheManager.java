@@ -42,6 +42,7 @@ public class CacheManager {
     public void revalidateCache() {
         config.set("cache", System.currentTimeMillis());
         config.save();
+        this.valid = true;
     }
 
     public long getCurrentCache() {

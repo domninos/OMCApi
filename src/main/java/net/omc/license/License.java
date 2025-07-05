@@ -2,7 +2,7 @@ package net.omc.license;
 
 public class License {
     private String key;
-    private final Status status;
+    private Status status;
 
     public License(Status status) {
         this.status = status;
@@ -10,6 +10,10 @@ public class License {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getKey() {
