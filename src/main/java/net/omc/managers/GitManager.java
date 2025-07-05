@@ -2,6 +2,7 @@ package net.omc.managers;
 
 import net.omc.OMCPlugin;
 import net.omc.handlers.HttpHandler;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -32,16 +33,16 @@ public class GitManager {
             HttpResponse<String> response = HttpHandler.getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                JSONObject object = new JSONObject(response.body());
+                // an array
+                JSONArray array = new JSONArray(response.body());
+                JSONObject object = array.getJSONObject(array.length() - 1);
 
                 return object.getString("tag_name");
             }
 
             plugin.error("Something went wrong while checking for updates. HTTP Code: " + response.statusCode());
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             plugin.error("Something went wrong while checking for updates.", e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
 
         return "NULL";

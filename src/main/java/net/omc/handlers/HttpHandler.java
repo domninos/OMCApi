@@ -17,15 +17,21 @@ public class HttpHandler {
     public static HttpRequest.Builder buildRequest(String url, Type type) {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .header("Content-Profile", "public")
-                .header("Accept-Profile", "public")
+                .header("User-Agent", "OMC API")
                 .timeout(Duration.ofSeconds(30));
 
+        if (type == Type.GITHUB) {
+            builder.header("Content-Type", "application/vnd.github+json")
+                    .header("Accept", "application/vnd.github+json");
+        } else if (type == Type.SB) {
+            builder.header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .header("Content-Profile", "public")
+                    .header("Accept-Profile", "public");
+        }
+
         if (!type.getToken().isBlank())
-            builder
-                    .header("Authorization", "Bearer " + type.getToken())
+            builder.header("Authorization", "Bearer " + type.getToken())
                     .header("apikey", type.getToken());
 
         return builder;
@@ -33,7 +39,7 @@ public class HttpHandler {
 
     public enum Type {
         SB("sb_publishable_XPx-LFkL3eYQwPdXjiO22Q_YTm9k_cG"),
-        GITHUB("");
+        GITHUB("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");
 
         final String token;
 
