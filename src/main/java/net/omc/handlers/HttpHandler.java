@@ -39,7 +39,7 @@ public class HttpHandler {
 
     public enum Type {
         SB("sb_publishable_XPx-LFkL3eYQwPdXjiO22Q_YTm9k_cG"),
-        GITHUB("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"); // only for nearchat
+        GITHUB("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"); // only for nearchat
 
         final String token;
 

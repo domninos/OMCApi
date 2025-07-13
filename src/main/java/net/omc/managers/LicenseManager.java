@@ -41,6 +41,7 @@ public class LicenseManager {
     }
 
     public void setup() {
+
         if (config.getString("network_id") == null) {
             this.networkId = generateNetworkId();
 
@@ -129,8 +130,7 @@ public class LicenseManager {
 
         String network_id = getNetworkId();
 
-        Status status = LicenseValidator.activateLicense(
-                plugin.getDescription().getName().toLowerCase(), network_id, key, Status.ACTIVE.name(), getIp());
+        Status status = LicenseValidator.activateLicense(plugin.getDescription().getName().toLowerCase(), key);
 
         if (status == Status.DUPLICATE) {
             plugin.sendConsole("&aLicense already activated.");

@@ -34,7 +34,6 @@ public class OMCApi {
         return INSTANCE;
     }
 
-
     public LicenseManager loadLicense(OMCPlugin plugin) {
         if (this.licenseManager == null)
             this.licenseManager = new LicenseManager(plugin);

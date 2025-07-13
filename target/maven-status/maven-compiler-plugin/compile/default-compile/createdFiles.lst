@@ -2,7 +2,10 @@ net\omc\database\SQLCredentialLess.class
 net\omc\database\sqlite\OMCSQLiteAdapter.class
 net\omc\handlers\OMCConfigHandler.class
 net\omc\license\LicenseValidator.class
+net\omc\OMCPluginImpl.class
+net\omc\handlers\HttpHandler$Type.class
 net\omc\config\value\ValueDef.class
+net\omc\handlers\HttpHandler.class
 net\omc\OMCPlugin.class
 net\omc\config\value\ValueBuilder.class
 net\omc\database\ISQLDatabase.class
@@ -10,11 +13,13 @@ net\omc\database\OMCDatabase.class
 net\omc\config\value\ValueType.class
 net\omc\managers\LicenseManager.class
 net\omc\util\Libraries.class
+net\omc\managers\VersionManager.class
 net\omc\database\postgres\OMCPostgresDatabase.class
 net\omc\util\MainUtil.class
 net\omc\handlers\LibraryHandler$1.class
 net\omc\database\DatabaseAdapter.class
 net\omc\util\Flushable.class
+net\omc\managers\GitManager.class
 net\omc\config\OMCConfig.class
 net\omc\database\SQLCredentials.class
 net\omc\util\OMCExec.class

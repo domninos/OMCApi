@@ -18,11 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Level;
 
 public abstract class OMCPlugin extends JavaPlugin implements Flushable {
-    /*
-    TODO:
-     - VersionHandler
-     */
-
     public abstract void registerListeners();
 
     public abstract void registerCommands();
@@ -36,6 +31,21 @@ public abstract class OMCPlugin extends JavaPlugin implements Flushable {
     public abstract OMCDatabaseHandler getDatabaseHandler();
 
     public abstract void stopLibraryExecutor();
+
+    public void checkForUpdates(String plugin) {
+        getVersionManager().checkForUpdates(plugin);
+    }
+
+    public void checkLicense(String plugin) {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            getLicenseManager().setup();
+
+            if (!getLicenseManager().isLicenseValid()) {
+                sendConsole("&eYou are using an unregistered plugin. Please activate using /" + plugin + " license <key>");
+                sendConsole("&e(The key is given by the plugin author)");
+            }
+        });
+    }
 
     public VersionManager getVersionManager() {
         return getAPI().getVersionManager(this);

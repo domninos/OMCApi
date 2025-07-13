@@ -1,0 +1,4 @@
+name: 'OMCApi'
+version: ${version}
+api-version: '1.13'
+main: net.omc.OMCPluginImpl

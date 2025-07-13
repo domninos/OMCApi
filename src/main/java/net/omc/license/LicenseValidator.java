@@ -7,21 +7,20 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class LicenseValidator {
-//
-    public static void main(String[] args) {
-        System.out.println(checkLicense("nearchat", "18221d7d1126-9IRX-8TB6-YD3F-AJF4"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(checkLicense("nearchat", "18221d7d1126-9IRX-8TB6-YD3F-AJF4"));
+//    }
 
 
     // bought_by should be updated separately. use it through discord bot. /license update <key> <key> <value>
 
     // should just change network_id, status, ip. license should be already available when doing /license create <plugin>
-    public static Status activateLicense(String plugin, String network_id, String license, String status, String ip) {
+    public static Status activateLicense(String plugin, String license) {
         String url = "https://mxnuzxiklpdxrgapuusx.supabase.co/rest/v1/rpc/register";
 
         String jsonPayload = String.format(
-                "{\"plugin\":\"%s\",\"network_id\":\"%s\",\"license\":\"%s\",\"status\":\"%s\",\"ip\":\"%s\"}",
-                plugin, network_id, license, status, ip
+                "{\"plugin\":\"%s\",,\"license\":\"%s\"\"}",
+                plugin, license
         );
 
         try {
@@ -47,6 +46,9 @@ public class LicenseValidator {
     }
 
     public static Status checkLicense(String plugin, String license) {
+        if (license == null || license.equalsIgnoreCase("unset") || license.equalsIgnoreCase("null"))
+            return Status.NULL;
+
         String url = "https://mxnuzxiklpdxrgapuusx.supabase.co/rest/v1/rpc/get_status";
 
         // Use POST with JSON body for RPC calls
@@ -63,8 +65,6 @@ public class LicenseValidator {
             HttpResponse<String> response = HttpHandler.getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             JSONObject object = new JSONObject(response.body());
-
-            System.out.println(response.body());
 
             return Status.get(object.getString("get_license_status"));
         } catch (Exception ignore) {

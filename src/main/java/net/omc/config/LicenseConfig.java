@@ -11,6 +11,7 @@ public class LicenseConfig {
 
     public LicenseConfig(OMCPlugin plugin, String file_name) {
         this.file = new File(plugin.getDataFolder(), "/lib/" + file_name);
+        generateFile();
     }
 
     public void save() {
@@ -18,8 +19,6 @@ public class LicenseConfig {
     }
 
     public void save(String toSave) {
-        generateFile();
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(toSave);
         } catch (IOException e) {
@@ -28,8 +27,6 @@ public class LicenseConfig {
     }
 
     public String load(boolean set) throws IOException {
-        generateFile();
-
         StringBuilder read = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -72,8 +69,7 @@ public class LicenseConfig {
 
     private void generateFile() {
         try {
-            if (!file.exists())
-                file.createNewFile();
+            file.createNewFile();
         } catch (Exception e) {
             e.fillInStackTrace();
         }
